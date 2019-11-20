@@ -12,15 +12,25 @@ game_folder = os.path.dirname(__file__)
 img_folder = os.path.join(game_folder, "image")
 
 
+
 #initialize pygame
 pygame.init()
 pygame.mixer.init()
 #create window 
 screen  = pygame.display.set_mode((WIDTH, HEIGHT)) #set the demensions of the screen
 pygame.display.set_caption("GALACTICMOONHUNT")  #set/display the title of the game
-icon = pygame.image.load('moon.png') #load the game icon
+icon = pygame.image.load(os.path.join(img_folder, "moon.png")).convert()#load the game icon
+
 pygame.display.set_icon(icon) #display the icon
 clock = pygame.time.Clock()
+
+font_name = pygame.font.match_font("arial") #get the arial font from your computer (or the closest match)
+def draw_text(surface, text, size, x, y): #draw text on the screen 
+    font= pygame.font.Font(font_name, size) #create font with the parameters font name and size
+    text_surface = font.render(text, True, (0,255,0)) #make a surcafe for the text on the screen, true = anti-alias
+    text_rect = text_surface.get_rect() #make a rectangle for the text to be able to place the text
+    text_rect.midtop = (x,y) #set the location of the text to the midle of the rectangle
+    surface.blit(text_surface, text_rect) #draw onto the screen
 
 
 class Player(pygame.sprite.Sprite): #set up player
@@ -113,7 +123,7 @@ class Bullet(pygame.sprite.Sprite):
 
 
 #background
-backgroundImg = pygame.image.load("space.jpg") #set the background image
+backgroundImg = pygame.image.load(os.path.join(img_folder, "space.jpg")).convert() #set the background image
 backgroundx = random.randint(-4910, -20) #set a random location for the nackground on the x axis
 backgroundy = random.randint(-2700, 0)#set a random location for the nackground on the y axis
 backgroundy_change = 0 #the background on the y axis yet doesnt move yet
@@ -137,7 +147,7 @@ for i in range(7): #create 7 enemies
     mobs.add(mob) #add an enemy to the mobs group
 
 
-
+score = 0
 
 #Game Loop
 running = True
@@ -197,6 +207,7 @@ while running:
         m = Mob()
         all_sprites.add(m) #add the mob to tha sll srpites list
         mobs.add(m) #add mob to the mob list
+        score += 100
     #check to see if a mob hit the player
     hits = pygame.sprite.spritecollide(player, mobs, False, pygame.sprite.collide_circle) #check the sprite againt the group
     
@@ -207,8 +218,10 @@ while running:
     #screen.fill((0,0,0)) #set the screen .... not needed?
     background(backgroundx, backgroundy) #call the funtion that draws the background 
     all_sprites.draw(screen) #draw all the spites onto the screen
+    draw_text(screen, str(score), 50, WIDTH/2, 10) #call the drawtext funtion, screen if the surface, string of the score is the text, 
     #do after drawing everything
     pygame.display.flip() #update the screen to show the drawings
+    print(score)
 pygame.quit()
 
 

@@ -14,7 +14,7 @@ img_folder = os.path.join(game_folder, "image")
 
 
 #initialize pygame
-pygame.init()
+pygame.init() 
 pygame.mixer.init()
 #create window 
 screen  = pygame.display.set_mode((WIDTH, HEIGHT)) #set the demensions of the screen
@@ -218,7 +218,7 @@ while running:
     #screen.fill((0,0,0)) #set the screen .... not needed?
     background(backgroundx, backgroundy) #call the funtion that draws the background 
     all_sprites.draw(screen) #draw all the spites onto the screen
-    draw_text(screen, str(score), 50, WIDTH/2, 10) #call the drawtext funtion, screen if the surface, string of the score is the text, 
+    draw_text(screen, "Score: "+str(score), 50, WIDTH/2, 10) #call the drawtext funtion, screen if the surface, string of the score is the text, 
     #do after drawing everything
     pygame.display.flip() #update the screen to show the drawings
     print(score)

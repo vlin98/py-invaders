@@ -5,7 +5,7 @@ import os
 #def gameloop():
 WIDTH = 480
 HEIGHT = 800
-FPS = 100
+FPS = 150
 
 #set up assets folder
 game_folder = os.path.dirname(__file__)
@@ -31,6 +31,30 @@ def draw_text(surface, text, size, x, y): #draw text on the screen
     text_rect = text_surface.get_rect() #make a rectangle for the text to be able to place the text
     text_rect.midtop = (x,y) #set the location of the text to the midle of the rectangle
     surface.blit(text_surface, text_rect) #draw onto the screen
+
+def show_gameover_screen():
+    draw_text(screen, "GALACTICMOON", 64, WIDTH/2, HEIGHT/4) #show game over
+    draw_text(screen, "Press W to move up", 40, WIDTH/2, HEIGHT/2 -70) # DISPLAY INSTRUCTION
+    draw_text(screen, "Press S to move down", 40, WIDTH/2, HEIGHT/2 -30) # DISPLAY INSTRUCTION
+    draw_text(screen, "Press A to move left", 40, WIDTH/2, HEIGHT/2 +10) # DISPLAY INSTRUCTION
+    draw_text(screen, "Press D to move right", 40, WIDTH/2, HEIGHT/2 + 50) # DISPLAY INSTRUCTION
+    draw_text(screen, "Press UP-ARROW to shoot", 40, WIDTH/2, HEIGHT/2 + 90) # DISPLAY INSTRUCTION
+    draw_text(screen, "PRESS SPACE BEGIN", 40, WIDTH/2, HEIGHT - 100) #DISPLAY INSTRUCTIONS
+    pygame.display.flip() #allow users to see the endgame screen
+    waiting = True #set a new loop
+    while waiting:
+        clock.tick(FPS) #speed at which the loop if gone through
+        for event in pygame.event.get(): #quite if the player exits the game
+            if event.type == pygame.QUIT:
+                pygame.quite()
+            if event.type == pygame.KEYUP: #start the game if the player presses a button
+                if event.key == pygame.K_SPACE:
+                    waiting = False
+
+
+
+
+
 
 
 class Player(pygame.sprite.Sprite): #set up player
@@ -132,26 +156,27 @@ backgroundx_change = 0 #the background on the x axis yet doesnt move yet
 def background(x, y):
     screen.blit(backgroundImg, (x, y)) #draw the background onto the screen
 
-        
-
-all_sprites = pygame.sprite.Group()
-mobs = pygame.sprite.Group()
-player = Player()
-all_sprites.add(player)  
-bullets = pygame.sprite.Group()
-
-
-for i in range(7): #create 7 enemies
-    mob = Mob() #create an enemy
-    all_sprites.add(mob) #add an enemy to the all sprites group
-    mobs.add(mob) #add an enemy to the mobs group
-
-
-score = 0
+    
 
 #Game Loop
+game_over = True #determines whether to show the game over screen or not
 running = True
 while running: 
+    if game_over:
+        show_gameover_screen()
+        game_over = False
+        all_sprites = pygame.sprite.Group()
+        mobs = pygame.sprite.Group()
+        player = Player()
+        all_sprites.add(player)  
+        bullets = pygame.sprite.Group()
+        for i in range(7): #create 7 enemies
+            mob = Mob() #create an enemy
+            all_sprites.add(mob) #add an enemy to the all sprites group
+            mobs.add(mob) #add an enemy to the mobs group
+        #set score = 0 at start
+        score = 0
+
     #keep loop running at the right speed
     clock.tick(FPS)
     #process input(events)
@@ -192,11 +217,8 @@ while running:
         backgroundy = -2700 #set the upper y boundary for the background
     if backgroundy < -2700:
         backgroundy = 0 #set the lower y boundary for the background
-    print(backgroundy)
-    print(backgroundx)
-    
 
-        
+
     #Update
     all_sprites.update()
     
@@ -212,7 +234,7 @@ while running:
     hits = pygame.sprite.spritecollide(player, mobs, False, pygame.sprite.collide_circle) #check the sprite againt the group
     
     if hits: #turn off game of you collide
-        running = False
+        game_over = True
     
     #Draw/render
     #screen.fill((0,0,0)) #set the screen .... not needed?
@@ -221,7 +243,7 @@ while running:
     draw_text(screen, "Score: "+str(score), 50, WIDTH/2, 10) #call the drawtext funtion, screen if the surface, string of the score is the text, 
     #do after drawing everything
     pygame.display.flip() #update the screen to show the drawings
-    print(score)
+    
 pygame.quit()
 
 

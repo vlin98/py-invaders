@@ -1,7 +1,7 @@
 import pygame
 import random
 import os
-#Game Loop 
+#Game Loop
 #def gameloop():
 WIDTH = 480
 HEIGHT = 800
@@ -14,18 +14,18 @@ img_folder = os.path.join(game_folder, "image")
 
 
 #initialize pygame
-pygame.init() 
+pygame.init()
 pygame.mixer.init()
-#create window 
+#create window
 screen  = pygame.display.set_mode((WIDTH, HEIGHT)) #set the demensions of the screen
 pygame.display.set_caption("GALACTICMOONHUNT")  #set/display the title of the game
 icon = pygame.image.load(os.path.join(img_folder, "moon.png")).convert()#load the game icon
 
 pygame.display.set_icon(icon) #display the icon
 clock = pygame.time.Clock()
-
 font_name = pygame.font.match_font("arial") #get the arial font from your computer (or the closest match)
-def draw_text(surface, text, size, x, y): #draw text on the screen 
+
+def draw_text(surface, text, size, x, y): #draw text on the screen
     font= pygame.font.Font(font_name, size) #create font with the parameters font name and size
     text_surface = font.render(text, True, (0,255,0)) #make a surcafe for the text on the screen, true = anti-alias
     text_rect = text_surface.get_rect() #make a rectangle for the text to be able to place the text
@@ -50,11 +50,6 @@ def show_gameover_screen():
             if event.type == pygame.KEYUP: #start the game if the player presses a button
                 if event.key == pygame.K_SPACE:
                     waiting = False
-
-
-
-
-
 
 
 class Player(pygame.sprite.Sprite): #set up player
@@ -92,7 +87,7 @@ class Player(pygame.sprite.Sprite): #set up player
             self.rect.bottom = HEIGHT
         if self.rect.top < 0:
             self.rect.top = HEIGHT
-    
+
     def shootup(self): #define the shooting funtion
         bullet = Bullet(self.rect.centerx, self.rect.top) #create a bullet and the bullets location
         all_sprites.add(bullet) #add the bullet to the app_sprites group
@@ -134,12 +129,12 @@ class Bullet(pygame.sprite.Sprite):
         self.radius = 10
         pygame.draw.circle(self.image, (0,0,255), self.rect.center, self.radius)
         self.rect.bottom = y #sets the y cordinate of the bullet
-        self.rect.centerx = x #sets the x cordinate of the bullet 
+        self.rect.centerx = x #sets the x cordinate of the bullet
         self.speedy = -30 #set the bullets y speed
-        self.speedx = 0 
-    
+        self.speedx = 0
 
-    def update(self): 
+
+    def update(self):
         self.rect.y += self.speedy #move the bullet along the y axis
         #kill the bullet if it moves off the screen
         if self.rect.bottom < 0: #if the bottom on the moves pat the top of the screen
@@ -156,19 +151,19 @@ backgroundx_change = 0 #the background on the x axis yet doesnt move yet
 def background(x, y):
     screen.blit(backgroundImg, (x, y)) #draw the background onto the screen
 
-    
+
 
 #Game Loop
 game_over = True #determines whether to show the game over screen or not
 running = True
-while running: 
+while running:
     if game_over:
         show_gameover_screen()
         game_over = False
         all_sprites = pygame.sprite.Group()
         mobs = pygame.sprite.Group()
         player = Player()
-        all_sprites.add(player)  
+        all_sprites.add(player)
         bullets = pygame.sprite.Group()
         for i in range(7): #create 7 enemies
             mob = Mob() #create an enemy
@@ -196,10 +191,10 @@ while running:
             if event.key == pygame.K_s or pygame.K_w: #if the user releases the s or w key
                 backgroundy_change = 0 #the background stops moving or or down
     #set background movement
-            
+
     keystates = pygame.key.get_pressed()
     if keystates[pygame.K_a]:
-        backgroundx_change = 30  
+        backgroundx_change = 30
     if keystates[pygame.K_d]:
         backgroundx_change = -30
     if keystates[pygame.K_w]:
@@ -213,7 +208,7 @@ while running:
         backgroundx = -3340
     if backgroundx > -20: #set the right x boundary for the background
         backgroundx = -770
-    if backgroundy > 0: 
+    if backgroundy > 0:
         backgroundy = -2700 #set the upper y boundary for the background
     if backgroundy < -2700:
         backgroundy = 0 #set the lower y boundary for the background
@@ -221,7 +216,7 @@ while running:
 
     #Update
     all_sprites.update()
-    
+
 
     #check to see if a bullet hit the mob player
     hits = pygame.sprite.groupcollide(mobs, bullets, True, True) #delete bullet and mob if they collide
@@ -232,18 +227,18 @@ while running:
         score += 100
     #check to see if a mob hit the player
     hits = pygame.sprite.spritecollide(player, mobs, False, pygame.sprite.collide_circle) #check the sprite againt the group
-    
+
     if hits: #turn off game of you collide
         game_over = True
-    
+
     #Draw/render
     #screen.fill((0,0,0)) #set the screen .... not needed?
-    background(backgroundx, backgroundy) #call the funtion that draws the background 
+    background(backgroundx, backgroundy) #call the funtion that draws the background
     all_sprites.draw(screen) #draw all the spites onto the screen
-    draw_text(screen, "Score: "+str(score), 50, WIDTH/2, 10) #call the drawtext funtion, screen if the surface, string of the score is the text, 
+    draw_text(screen, "Score: "+str(score), 50, WIDTH/2, 10) #call the drawtext funtion, screen if the surface, string of the score is the text,
     #do after drawing everything
     pygame.display.flip() #update the screen to show the drawings
-    
+
 pygame.quit()
 
 

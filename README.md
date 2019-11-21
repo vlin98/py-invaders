@@ -1,5 +1,7 @@
 # Py-Invader
 
+![py_invaders](galacticmoon2)
+
 ### Introduction:
 
 `py-invader` is a Space Invaders inspired 2D arcade game written in Python using the pygame libraries

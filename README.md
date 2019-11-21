@@ -1,6 +1,6 @@
 # Py-Invader
 
-![py_invaders](galacticmoon2)
+![py_invaders](galacticmoon2.png)
 
 ### Introduction:
 

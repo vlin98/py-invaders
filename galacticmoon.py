@@ -5,7 +5,7 @@ import os
 #def gameloop():
 WIDTH = 480
 HEIGHT = 800
-FPS = 150
+FPS = 50
 
 #set up assets folder
 game_folder = os.path.dirname(__file__)
@@ -23,6 +23,7 @@ icon = pygame.image.load(os.path.join(img_folder, "moon.png")).convert()#load th
 
 pygame.display.set_icon(icon) #display the icon
 clock = pygame.time.Clock()
+score = 0 #set score = 0 when pygame starts up
 
 font_name = pygame.font.match_font("arial") #get the arial font from your computer (or the closest match)
 def draw_text(surface, text, size, x, y): #draw text on the screen 
@@ -33,6 +34,8 @@ def draw_text(surface, text, size, x, y): #draw text on the screen
     surface.blit(text_surface, text_rect) #draw onto the screen
 
 def show_gameover_screen():
+    background(backgroundx, backgroundy)
+    draw_text(screen, "Score: "+str(score), 50, WIDTH/2, 10) #displays the score
     draw_text(screen, "GALACTICMOON", 64, WIDTH/2, HEIGHT/4) #show game over
     draw_text(screen, "Press W to move up", 40, WIDTH/2, HEIGHT/2 -70) # DISPLAY INSTRUCTION
     draw_text(screen, "Press S to move down", 40, WIDTH/2, HEIGHT/2 -30) # DISPLAY INSTRUCTION
@@ -44,17 +47,12 @@ def show_gameover_screen():
     waiting = True #set a new loop
     while waiting:
         clock.tick(FPS) #speed at which the loop if gone through
-        for event in pygame.event.get(): #quite if the player exits the game
+        for event in pygame.event.get(): #quit if the player exits the game
             if event.type == pygame.QUIT:
-                pygame.quite()
+                pygame.quit()
             if event.type == pygame.KEYUP: #start the game if the player presses a button
                 if event.key == pygame.K_SPACE:
                     waiting = False
-
-
-
-
-
 
 
 class Player(pygame.sprite.Sprite): #set up player
@@ -174,7 +172,7 @@ while running:
             mob = Mob() #create an enemy
             all_sprites.add(mob) #add an enemy to the all sprites group
             mobs.add(mob) #add an enemy to the mobs group
-        #set score = 0 at start
+        #set score = 0 when game starts
         score = 0
 
     #keep loop running at the right speed
@@ -240,7 +238,7 @@ while running:
     #screen.fill((0,0,0)) #set the screen .... not needed?
     background(backgroundx, backgroundy) #call the funtion that draws the background 
     all_sprites.draw(screen) #draw all the spites onto the screen
-    draw_text(screen, "Score: "+str(score), 50, WIDTH/2, 10) #call the drawtext funtion, screen if the surface, string of the score is the text, 
+    draw_text(screen, "Score: "+str(score), 50, WIDTH/2, 10) #call the drawtext funtion, screen if the surface, string of the score is the text
     #do after drawing everything
     pygame.display.flip() #update the screen to show the drawings
     

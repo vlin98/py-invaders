@@ -58,11 +58,11 @@ def show_gameover_screen():
 class Player(pygame.sprite.Sprite): #set up player
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((50, 40)) #set player image
-        self.image.fill((0,255,0))  #sets the color of the player image
-        self.rect = self.image.get_rect() #gives the image a rectangle
-        self.radius = 23
-        pygame.draw.circle(self.image, (0,0,255), self.rect.center, self.radius)
+        self.image = pygame.image.load(os.path.join(img_folder, "spaceship_2.png")).convert() ## 50 by 50
+        self.image.set_colorkey((0,0,0))
+        self.rect = self.image.get_rect()
+        self.radius = 22
+        #pygame.draw.circle(self.image, (0,0,0), self.rect.center, self.radius)
         self.rect.centerx = WIDTH/2 #X position
         self.rect.bottom = HEIGHT - 10
         self.speedx = 0 #set side to side speed
@@ -130,7 +130,7 @@ class Bullet(pygame.sprite.Sprite):
         self.image.fill((255,0,0))  #sets the color of the bullet image
         self.rect = self.image.get_rect() #gives the image a rectangle
         self.radius = 10
-        pygame.draw.circle(self.image, (0,0,255), self.rect.center, self.radius)
+        #pygame.draw.circle(self.image, (0,0,255), self.rect.center, self.radius)
         self.rect.bottom = y #sets the y cordinate of the bullet
         self.rect.centerx = x #sets the x cordinate of the bullet 
         self.speedy = -30 #set the bullets y speed
